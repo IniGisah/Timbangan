@@ -16,6 +16,8 @@ import android.os.Handler;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -33,7 +35,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements works.luii.timbangan.Notify {
@@ -71,50 +75,32 @@ public class MainActivity extends AppCompatActivity implements works.luii.timban
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    MainActivity.this, android.Manifest.permission.BLUETOOTH)) {
-                Toast.makeText(
-                        MainActivity.this,
-                        "Mohon setujui untuk keperluan izin",
-                        Toast.LENGTH_SHORT).show();
-                ActivityCompat.requestPermissions(MainActivity.this,new String[]{android.Manifest.permission.BLUETOOTH},1);
-//            } else {
-//                ActivityCompat.requestPermissions(MainActivity.this,new String[]{android.Manifest.permission.BLUETOOTH},1);
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                //The user have conceded permission
+                Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                setupUI();
             }
-        } else if (ContextCompat.checkSelfPermission(MainActivity.this,
-                android.Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    MainActivity.this, android.Manifest.permission.BLUETOOTH_ADMIN)) {
-                Toast.makeText(
-                        MainActivity.this,
-                        "Mohon setujui untuk keperluan izin",
-                        Toast.LENGTH_SHORT).show();
-                ActivityCompat.requestPermissions(MainActivity.this,new String[]{android.Manifest.permission.BLUETOOTH_ADMIN},1);
-//            } else {
-//                ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.BLUETOOTH_ADMIN},1);
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+                Toast.makeText(MainActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
             }
-        } else if (ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    MainActivity.this, Manifest.permission.BLUETOOTH_CONNECT)) {
-                Toast.makeText(
-                        MainActivity.this,
-                        "Mohon setujui untuk keperluan izin",
-                        Toast.LENGTH_SHORT).show();
-                ActivityCompat.requestPermissions(MainActivity.this,new String[]{android.Manifest.permission.BLUETOOTH_CONNECT},1);
-//            } else {
-//                ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.BLUETOOTH_CONNECT},1);
-            }
-        }else {
-            Toast.makeText(
-                    MainActivity.this,
-                    "Permission accepted",
-                    Toast.LENGTH_SHORT).show();
-        }
+
+        };
+        TedPermission.create()
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(android.Manifest.permission.BLUETOOTH, android.Manifest.permission.BLUETOOTH_ADMIN, android.Manifest.permission.BLUETOOTH_CONNECT)
+                .check();
+
+
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
+    }
 
+    private void setupUI() {
         // UI
         btBondedDevicesListView = (ListView) findViewById(R.id.bt_bonded_dev_list);
         console = (TextView) findViewById(R.id.console);
@@ -240,28 +226,6 @@ public class MainActivity extends AppCompatActivity implements works.luii.timban
      */
     private String[] fillBtBondedDeviceList() {
         String[] dl = new String[0];
-        if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    MainActivity.this, android.Manifest.permission.BLUETOOTH)) {
-                Toast.makeText(
-                        MainActivity.this,
-                        "Mohon setujui untuk keperluan izin",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                ActivityCompat.requestPermissions(MainActivity.this,new String[]{android.Manifest.permission.BLUETOOTH},1);
-            }
-        } else if (ContextCompat.checkSelfPermission(MainActivity.this,
-                android.Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    MainActivity.this, android.Manifest.permission.BLUETOOTH_ADMIN)) {
-                Toast.makeText(
-                        MainActivity.this,
-                        "Mohon setujui untuk keperluan izin",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.BLUETOOTH_ADMIN},1);
-            }
-        } else {
             StringBuilder deviceList = new StringBuilder();
             btBondedDevices = bluetoothAdapter.getBondedDevices();
             if (btBondedDevices.size() > 0) {
@@ -272,7 +236,6 @@ public class MainActivity extends AppCompatActivity implements works.luii.timban
             } else deviceList.append("No Devices!\n,");
 
             dl = deviceList.toString().split(",");
-        }
         return dl;
     }
 
