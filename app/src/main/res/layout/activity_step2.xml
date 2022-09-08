@@ -7,12 +7,12 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView_pg2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="45dp"
-        android:text="Langkah 1"
+        android:text="Langkah 2"
         android:textStyle="bold"
         android:textSize="25sp"
         app:fontFamily="@font/nunito_sans_black"
@@ -20,55 +20,38 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView_detail_pg2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Koneksikan perangkat anda ke \nTimbangan dengan Bluetooth"
+        android:text="Koneksikan perangkat anda ke \nRFID Reader dengan Bluetooth"
         android:layout_marginStart="20dp"
         android:layout_marginTop="100dp"
-        tools:layout_editor_absoluteX="17dp"
         app:fontFamily="@font/nunito_sans"
+        tools:layout_editor_absoluteX="17dp"
         tools:layout_editor_absoluteY="136dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <ListView
-        android:id="@+id/bt_bonded_dev_list_pg1"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+    <Button
+        android:id="@+id/open_setting_pg2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="60dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_weight=".5">
-    </ListView>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:text="Buka Pengaturan" />
 
     <Button
-        android:id="@+id/next_pg1"
+        android:id="@+id/next_pg2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:text="Next" />
 
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_pg1"
-        app:fabSize="normal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:tint="@color/white"
-        app:backgroundTint="@color/colorAccent"
-        android:src="@drawable/ic_baseline_refresh_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
 </androidx.constraintlayout.widget.ConstraintLayout>

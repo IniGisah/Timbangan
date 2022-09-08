@@ -133,32 +133,9 @@ public class MainActivity extends AppCompatActivity implements works.luii.timban
                 bluetoothDevice = null;
                 for (int i = 0; i <= position; i++) bluetoothDevice = (BluetoothDevice) bi.next();
                 if (bluetoothDevice != null) {
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                                MainActivity.this, android.Manifest.permission.BLUETOOTH)) {
-                            Toast.makeText(
-                                    MainActivity.this,
-                                    "Mohon setujui untuk keperluan izin",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            ActivityCompat.requestPermissions(MainActivity.this,new String[]{android.Manifest.permission.BLUETOOTH},1);
-                        }
-                    } else if (ContextCompat.checkSelfPermission(MainActivity.this,
-                            android.Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                                MainActivity.this, android.Manifest.permission.BLUETOOTH_ADMIN)) {
-                            Toast.makeText(
-                                    MainActivity.this,
-                                    "Mohon setujui untuk keperluan izin",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.BLUETOOTH_ADMIN},1);
-                        }
-                    } else {
-                        console.append("Selected device:" + bluetoothDevice.getName().toString() + " Address:" + bluetoothDevice.getAddress() + "\n\n");
-                        clientThread = new works.luii.timbangan.ClientThread(main, bluetoothDevice, console, dataToSendEditText.getText().toString(), h);
-                        clientThread.start();
-                    }
+                    console.append("Selected device:" + bluetoothDevice.getName().toString() + " Address:" + bluetoothDevice.getAddress() + "\n\n");
+                    clientThread = new works.luii.timbangan.ClientThread(main, bluetoothDevice, console, dataToSendEditText.getText().toString(), h);
+                    clientThread.start();
                 }
             }
         });
