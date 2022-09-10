@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -26,7 +28,8 @@ import java.util.List;
 import java.util.Set;
 
 public class ActivityStep1 extends AppCompatActivity implements works.luii.timbangan.Notify {
-    
+
+    private static final int REQUEST_ENABLE_BT = 0;
     //UI
     private Handler h;
     private ListView btBondedDevicesListView;
@@ -41,8 +44,7 @@ public class ActivityStep1 extends AppCompatActivity implements works.luii.timba
     String[] listOfBondedDevices;
 
     ActivityStep1 main;
-    Button nextButton = (Button) findViewById(R.id.next_pg1);
-    
+
     // Threads
     works.luii.timbangan.ClientThread clientThread;
     works.luii.timbangan.ConnectedThreadReadWriteData connectedThreadReadWriteData;
@@ -55,14 +57,15 @@ public class ActivityStep1 extends AppCompatActivity implements works.luii.timba
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        nextButton.setVisibility(View.GONE);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_step1);
+        Button nextButton = findViewById(R.id.next_pg1);
+        nextButton.setVisibility(View.GONE);
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
                 //The user have conceded permission
-                Toast.makeText(ActivityStep1.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ActivityStep1.this, "Permission Granted", Toast.LENGTH_SHORT).show();
                 setupUI();
             }
 
@@ -82,6 +85,7 @@ public class ActivityStep1 extends AppCompatActivity implements works.luii.timba
     private void setupUI() {
         // UI
         btBondedDevicesListView = (ListView) findViewById(R.id.bt_bonded_dev_list_pg1);
+        Button nextButton = findViewById(R.id.next_pg1);
 
         h = new Handler();
 
@@ -92,6 +96,14 @@ public class ActivityStep1 extends AppCompatActivity implements works.luii.timba
         Log.v("Bluetooth", bm.getAdapter().toString());
 
         bluetoothAdapter = bm.getAdapter();
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+
         listOfBondedDevices = null;
         if (bluetoothAdapter != null) listOfBondedDevices = fillBtBondedDeviceList();
         else listOfBondedDevices[0] = "Keine";

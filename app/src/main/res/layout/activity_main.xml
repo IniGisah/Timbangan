@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="15dp"
             android:text="Status Log:"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -42,14 +42,14 @@
             android:layout_height="wrap_content"
             android:paddingLeft="15dp"
             android:text="Send:"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/data_to_send"
             android:paddingLeft="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#bbbbbb"></EditText>
+            android:background="#bbbbbb" />
 
         <LinearLayout
             android:layout_width="match_parent"
