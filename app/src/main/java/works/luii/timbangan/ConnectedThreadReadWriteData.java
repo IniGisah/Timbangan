@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 public class ConnectedThreadReadWriteData extends Thread {
 
@@ -24,6 +25,8 @@ public class ConnectedThreadReadWriteData extends Thread {
     private final BluetoothSocket mSocket;
     private final InputStream mIs;
     private final OutputStream mOs;
+
+    float kgresult;
 
     works.luii.timbangan.Notify notify;
 
@@ -63,12 +66,14 @@ public class ConnectedThreadReadWriteData extends Thread {
         // Notify class which created this instance. This class then
         // needs to get the instance of this thread in order to
         // communicate with it.
-        notify.connectionSuceeded();
+        notify.connectionSuccessful();
 
         consoleOut("Waiting for incoming data.......\n");
 
         int length;
-
+        float before;
+        //float[] datareceive = new float[1];
+        ArrayList<Float> datareceive = new ArrayList<>();
 
         try {
             while (true) {
@@ -86,15 +91,38 @@ public class ConnectedThreadReadWriteData extends Thread {
                 } catch (InterruptedException e) {
                 }
                 consoleOut(received);
+                float datakg = Float.parseFloat(received.replaceAll("[\\D]" , "" ) );
+                Log.v("datakg", datakg + " kg");
+                if (datakg > 0.5) {
+                    before = datakg;
+                    if (before == datakg){
+                        datareceive.add(datakg);//addX(10, datareceive, datakg);
+                    }
+                }
+                if (datareceive.size() == 10){
+                    Log.v("msgdata", datakg + "Done receive");
+                    donereceive(datareceive);
+                }
             }
         } catch (IOException e) {
             consoleOut("Error during data transfer. Connection has been lost!");
         }
     }
 
+    private void donereceive(ArrayList<Float> dataarr){
+        float datatot = 0;
+        for(int i=0; i<dataarr.size(); i++){
+            datatot = datatot + dataarr.get(i);
+        }
+        kgresult = datatot / dataarr.size();
+        notify.dataReceiveDone(kgresult);
+    }
+
     /**
      * Send stream to device.
      */
+
+    /*
     public void send(String dataToSend) {
         try {
             if (dataToSend.length() > 0) {
@@ -105,7 +133,7 @@ public class ConnectedThreadReadWriteData extends Thread {
         } catch (IOException ee) {
             closeOutputStream();
         }
-    }
+    }*/
 
     /**
      * Shows text inside console- textView
@@ -113,12 +141,7 @@ public class ConnectedThreadReadWriteData extends Thread {
     private void consoleOut(String message) {
         final String m;
         m = message;
-        h.post(new Runnable() {
-            @Override
-            public void run() {
-                console.append(m);
-            }
-        });
+        h.post(() -> console.setText(m));
     }
 
     private void closeInputStream() {

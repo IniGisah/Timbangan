@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements works.luii.timban
         });
 
         // Send
+        /*
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,27 +151,20 @@ public class MainActivity extends AppCompatActivity implements works.luii.timban
 
             }
         });
+        */
 
         // Disconnect
-        disconect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clientThread.cancel();
-            }
-        });
+        disconect.setOnClickListener(view -> clientThread.cancel());
 
 
         // Fab...
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fillBtBondedDeviceList();
-                Snackbar.make(view, "Updated", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        fab.setOnClickListener(view -> {
+            fillBtBondedDeviceList();
+            Snackbar.make(view, "Updated", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
 
-                console.setText("");
-            }
+            console.setText("");
         });
     }
 
@@ -179,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements works.luii.timban
      * This instance is needed to send data via the {@link works.luii.timbangan.ConnectedThreadReadWriteData}
      */
     @Override
-    public void connectionSuceeded() {
+    public void connectionSuccessful() {
         Log.v("CON:", "Succeeded");
         connectedThreadReadWriteData = clientThread.getConnectedThread();
     }
@@ -187,13 +181,15 @@ public class MainActivity extends AppCompatActivity implements works.luii.timban
     @Override
     public void messageIncomming(String message) {
         final String m = message;
-        h.post(new Runnable() {
-            @Override
-            public void run() {
-                // todo: not working when writing to console from outside thread.....
-                //console.append(m);
-            }
+        h.post(() -> {
+            // todo: not working when writing to console from outside thread.....
+            //console.append(m);
         });
+
+    }
+
+    @Override
+    public void dataReceiveDone(float datakg) {
 
     }
 
@@ -202,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements works.luii.timban
      * Fill bluetooth device list
      */
     private String[] fillBtBondedDeviceList() {
-        String[] dl = new String[0];
+        String[] dl;
             StringBuilder deviceList = new StringBuilder();
             btBondedDevices = bluetoothAdapter.getBondedDevices();
             if (btBondedDevices.size() > 0) {
@@ -218,9 +214,6 @@ public class MainActivity extends AppCompatActivity implements works.luii.timban
 
     /**
      * Options Menu
-     *
-     * @param menu
-     * @return
      */
 
     @Override
@@ -232,9 +225,6 @@ public class MainActivity extends AppCompatActivity implements works.luii.timban
 
     /**
      * Callback for Options Menu
-     *
-     * @param item
-     * @return
      */
 
     @Override

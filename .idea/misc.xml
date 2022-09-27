@@ -17,9 +17,11 @@
         <entry key="app/src/main/res/font/nunito.xml" value="0.57" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_scan_1.xml" value="0.4930555555555556" />
+        <entry key="app/src/main/res/layout/activity_scan_2.xml" value="0.4930555555555556" />
         <entry key="app/src/main/res/layout/activity_step1.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_step2.xml" value="0.4930555555555556" />
         <entry key="app/src/main/res/layout/activity_step3.xml" value="0.4930555555555556" />
+        <entry key="app/src/main/res/layout/popup_done.xml" value="0.4930555555555556" />
       </map>
     </option>
   </component>

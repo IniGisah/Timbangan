@@ -31,8 +31,8 @@ public class Scan1 extends AppCompatActivity {
                 IdKambing.putString("id", editText.getText().toString());
                 IdKambing.commit();
 
-                //Intent intent = new Intent(v.getContext(), ActivityStep3.class);
-                //startActivity(intent);
+                Intent intent = new Intent(v.getContext(), Scan2.class);
+                startActivity(intent);
 
                 Toast.makeText(this, "Id Kambing : " + editText.getText(), Toast.LENGTH_SHORT).show();
                 editText.getText().clear();

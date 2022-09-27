@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 
@@ -113,19 +115,27 @@ public class ActivityStep1 extends AppCompatActivity implements works.luii.timba
 
         // Check device selected from list of bonded devices and establish a connection.
         main = this;
-        btBondedDevicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Iterator bi = btBondedDevices.iterator();
-                bluetoothDevice = null;
-                for (int i = 0; i <= position; i++) bluetoothDevice = (BluetoothDevice) bi.next();
-                if (bluetoothDevice != null) {
-                    nextButton.setVisibility(View.VISIBLE);
+        btBondedDevicesListView.setOnItemClickListener((parent, view, position, id) -> {
+            Iterator bi = btBondedDevices.iterator();
+            bluetoothDevice = null;
+            for (int i = 0; i <= position; i++) bluetoothDevice = (BluetoothDevice) bi.next();
+            if (bluetoothDevice != null) {
+                nextButton.setVisibility(View.VISIBLE);
 
-                    //console.append("Selected device:" + bluetoothDevice.getName().toString() + " Address:" + bluetoothDevice.getAddress() + "\n\n");
-                    //clientThread = new works.luii.timbangan.ClientThread(main, bluetoothDevice, console, dataToSendEditText.getText().toString(), h);
-                    //clientThread.start();
-                }
+                SharedPreferences sharedPreferences = getSharedPreferences("IDKambing",MODE_PRIVATE);
+                SharedPreferences.Editor IdKambing = sharedPreferences.edit();
+
+                //Gson gsonbt = new Gson();
+                //String jsonbt = gsonbt.toJson(bluetoothDevice);
+                //Log.v("btdevice", "bluetoothDevice data : " + bluetoothDevice);
+                //Log.v("jsonbt", "jsonbt data : " + jsonbt);
+
+                IdKambing.putString("btdevice", bluetoothDevice.toString());
+                IdKambing.commit();
+
+                //console.append("Selected device:" + bluetoothDevice.getName().toString() + " Address:" + bluetoothDevice.getAddress() + "\n\n");
+                //clientThread = new works.luii.timbangan.ClientThread(main, bluetoothDevice, console, dataToSendEditText.getText().toString(), h);
+                //clientThread.start();
             }
         });
 
@@ -136,15 +146,12 @@ public class ActivityStep1 extends AppCompatActivity implements works.luii.timba
 
         // Fab...
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_pg1);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fillBtBondedDeviceList();
-                Snackbar.make(view, "Updated", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        fab.setOnClickListener(view -> {
+            fillBtBondedDeviceList();
+            Snackbar.make(view, "Updated", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
 
-                //console.setText("");
-            }
+            //console.setText("");
         });
     }
 
@@ -153,28 +160,29 @@ public class ActivityStep1 extends AppCompatActivity implements works.luii.timba
      * This instance is needed to send data via the {@link works.luii.timbangan.ConnectedThreadReadWriteData}
      */
     @Override
-    public void connectionSuceeded() {
+    public void connectionSuccessful() {
         Log.v("CON:", "Succeeded");
         connectedThreadReadWriteData = clientThread.getConnectedThread();
     }
 
     @Override
     public void messageIncomming(String message) {
-        final String m = message;
-        h.post(new Runnable() {
-            @Override
-            public void run() {
-                // todo: not working when writing to console from outside thread.....
-                //console.append(m);
-            }
+        h.post(() -> {
+            // todo: not working when writing to console from outside thread.....
+            //console.append(m);
         });
+    }
+
+    @Override
+    public void dataReceiveDone(float datakg){
+
     }
 
     /**
      * Fill bluetooth device list
      */
     private String[] fillBtBondedDeviceList() {
-        String[] dl = new String[0];
+        String[] dl;
         StringBuilder deviceList = new StringBuilder();
         btBondedDevices = bluetoothAdapter.getBondedDevices();
         if (btBondedDevices.size() > 0) {

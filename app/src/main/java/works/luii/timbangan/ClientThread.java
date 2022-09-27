@@ -24,8 +24,8 @@ import java.util.UUID;
 public class ClientThread extends Thread {
 
     // BT
-    private BluetoothSocket mSocket = null;
-    private BluetoothDevice mDevice = null;
+    private BluetoothSocket mSocket;
+    private BluetoothDevice mDevice;
     private int action;
 
 
@@ -117,11 +117,6 @@ public class ClientThread extends Thread {
     private void consoleOut(String message) {
         final String m;
         m = message;
-        h.post(new Runnable() {
-            @Override
-            public void run() {
-                console.append(m);
-            }
-        });
+        h.post(() -> console.setText(m));
     }
 }
