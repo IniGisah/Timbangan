@@ -31,7 +31,7 @@ public class ActivityStep2 extends AppCompatActivity {
                     nextButton.setVisibility(View.VISIBLE);
                     handler.removeCallbacksAndMessages(null);
                 }
-                Toast.makeText(ActivityStep2.this, "handler running...", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ActivityStep2.this, "handler running...", Toast.LENGTH_SHORT).show();
                 handler.postDelayed(this, 1000);
             }
         };

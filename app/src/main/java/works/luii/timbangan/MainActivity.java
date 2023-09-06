@@ -193,6 +193,11 @@ public class MainActivity extends AppCompatActivity implements works.luii.timban
 
     }
 
+    @Override
+    public void needReconnect(boolean hasil) {
+
+    }
+
 
     /**
      * Fill bluetooth device list

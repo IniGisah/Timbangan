@@ -23,7 +23,7 @@
         android:id="@+id/textView_detail_pg2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Koneksikan perangkat anda ke \nRFID Reader dengan Bluetooth"
+        android:text="Koneksikan perangkat anda ke \nRFID Reader dan Printer Thermal\ndengan Bluetooth"
         android:layout_marginStart="20dp"
         android:layout_marginTop="100dp"
         app:fontFamily="@font/nunito_sans"

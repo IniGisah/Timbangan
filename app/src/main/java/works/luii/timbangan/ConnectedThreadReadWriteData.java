@@ -90,10 +90,10 @@ public class ConnectedThreadReadWriteData extends Thread {
                     Thread.sleep(25);
                 } catch (InterruptedException e) {
                 }
-                consoleOut(received);
+                consoleOut(received + " kg");
                 float datakg = Float.parseFloat(received.replaceAll("[\\D]" , "" ) );
                 Log.v("datakg", datakg + " kg");
-                if (datakg > 0.5) {
+                if (datakg > 1) {
                     before = datakg;
                     if (before == datakg){
                         datareceive.add(datakg);//addX(10, datareceive, datakg);
@@ -102,10 +102,13 @@ public class ConnectedThreadReadWriteData extends Thread {
                 if (datareceive.size() == 10){
                     Log.v("msgdata", datakg + "Done receive");
                     donereceive(datareceive);
+                    cancel();
                 }
             }
         } catch (IOException e) {
             consoleOut("Error during data transfer. Connection has been lost!");
+            Log.v("Thread Debug:", "inside catch receive data error, call needreconnect rwthread");
+            notify.needReconnect(true);
         }
     }
 
@@ -116,6 +119,7 @@ public class ConnectedThreadReadWriteData extends Thread {
         }
         kgresult = datatot / dataarr.size();
         notify.dataReceiveDone(kgresult);
+        cancel();
     }
 
     /**

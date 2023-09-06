@@ -1,5 +1,6 @@
 package works.luii.timbangan;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -80,7 +81,7 @@ public class ActivityStep1 extends AppCompatActivity implements works.luii.timba
         TedPermission.create()
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(android.Manifest.permission.BLUETOOTH, android.Manifest.permission.BLUETOOTH_ADMIN, android.Manifest.permission.BLUETOOTH_CONNECT)
+                .setPermissions(android.Manifest.permission.BLUETOOTH, android.Manifest.permission.BLUETOOTH_ADMIN, android.Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN)
                 .check();
     }
 
@@ -175,6 +176,11 @@ public class ActivityStep1 extends AppCompatActivity implements works.luii.timba
 
     @Override
     public void dataReceiveDone(float datakg){
+
+    }
+
+    @Override
+    public void needReconnect(boolean hasil) {
 
     }
 

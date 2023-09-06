@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="works.luii.timbangan">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
@@ -10,9 +9,12 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
 
     <application
         android:allowBackup="true"
+        android:usesCleartextTraffic="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -22,7 +24,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".ActivityStep1"
+            android:name=".MainMenu"
             android:label="@string/app_name"
             android:exported="true">
             <intent-filter>
@@ -30,11 +32,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ActivityStep1"/>
         <activity android:name=".ActivityStep2"
                   android:configChanges="keyboard|keyboardHidden"/>
         <activity android:name=".ActivityStep3"/>
         <activity android:name=".Scan1"/>
         <activity android:name=".Scan2"/>
+        <activity android:name=".Upload"/>
+        <activity android:name=".ReadResult"/>
+        <activity android:name=".Read1"/>
     </application>
 
 </manifest>

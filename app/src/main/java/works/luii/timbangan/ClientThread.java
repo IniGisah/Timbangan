@@ -69,20 +69,24 @@ public class ClientThread extends Thread {
      */
 
     public void run() {
-        try {
-            Log.v("Client:Connecting......", "");
-            mSocket.connect();
-            consoleOut("Client: Connection successful!\n");
+        while(!ClientThread.interrupted()){
+            try {
+                Log.v("Client:", "Connecting.....");
+                mSocket.connect();
+                consoleOut("Client: Connection successful!\n");
 
-            // This reads incomming data from the conneted device...
-            ct = new ConnectedThreadReadWriteData(notify, mSocket, h, console, dataToSend);
-            ct.start();
+                // This reads incoming data from the connected device...
+                ct = new ConnectedThreadReadWriteData(notify, mSocket, h, console, dataToSend);
+                ct.start();
 
-        } catch (IOException e) {
-            Log.v("Client: Thread:", e.toString());
-            consoleOut("Client: Connection failed! Cause:" + e.toString() + "\n");
+            } catch (IOException e) {
+                Log.v("Client: Thread:", e.toString());
+                consoleOut("Connection failed! Trying to reconnect... Cause:" + e.toString() + "\n");
+                Log.v("Thread Debug:", "inside connection error, call needreconnect cthread");
+                notify.needReconnect(true);
+            }
+            return;
         }
-        return;
     }
 
     /**
