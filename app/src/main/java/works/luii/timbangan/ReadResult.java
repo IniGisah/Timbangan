@@ -31,7 +31,7 @@ public class ReadResult extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_result);
 
-        TextView idkambing = (TextView) findViewById(R.id.textview_dataid_read);
+        TextView idkambing = findViewById(R.id.textview_dataid_read);
         //TextView beratkambing = (TextView) findViewById(R.id.textview_data_berat);
 
         Button homebutton = findViewById(R.id.home_read);
@@ -58,9 +58,10 @@ public class ReadResult extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences("IDKambing",MODE_PRIVATE);
             String iddata2 = sharedPreferences.getString("id", "");
             ProgressBar loadingPB = findViewById(R.id.idLoadingPBRes);
-            TextView textresult = (TextView) findViewById(R.id.result_text_read);
-            TextView weightbefore = (TextView) findViewById(R.id.textview_data_beratbefore);
-            TextView weightafter = (TextView) findViewById(R.id.textview_data_beratafter);
+            TextView textresult = findViewById(R.id.result_text_read);
+            TextView weightbefore = findViewById(R.id.textview_data_beratbefore);
+            TextView weightafter = findViewById(R.id.textview_data_beratafter);
+            TextView difftext = findViewById(R.id.textview_data_selisih);
             HttpURLConnection urlConnection = null;
             loadingPB.setVisibility(View.VISIBLE);
 
@@ -88,12 +89,14 @@ public class ReadResult extends AppCompatActivity {
                 JSONObject data = dataArray.getJSONObject(0);
                 String beratbefore = data.getString("weight_before");
                 String beratafter = data.getString("weight_after");
+                Float selisih = Float.parseFloat(beratbefore) - Float.parseFloat(beratafter);
 
                 runOnUiThread(() -> {
                     loadingPB.setVisibility(View.GONE);
                     //textresult.setText("Data telah sukses dibaca!\nRespons : " + content);
-                    weightbefore.setText("Berat Awal : " + beratbefore);
-                    weightafter.setText("Berat Sesudah : " + beratafter);
+                    weightbefore.setText("Berat Awal : " + beratbefore + " kg");
+                    weightafter.setText("Berat Sesudah : " + beratafter+ " kg");
+                    difftext.setText("Selisih : " + selisih + " kg");
                 });
             } catch (Exception e) {
                 e.printStackTrace();

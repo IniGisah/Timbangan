@@ -1,5 +1,6 @@
 package works.luii.timbangan;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
@@ -20,9 +21,7 @@ public class Scan2 extends AppCompatActivity implements works.luii.timbangan.Not
     // Threads
     works.luii.timbangan.ClientThread clientThread;
     works.luii.timbangan.ConnectedThreadReadWriteData connectedThreadReadWriteData;
-
-
-
+    BluetoothAdapter myBluetooth = null;
     public void onCreate(Bundle savedInstanceState) {
         h = new Handler();
         super.onCreate(savedInstanceState);
@@ -32,8 +31,10 @@ public class Scan2 extends AppCompatActivity implements works.luii.timbangan.Not
         SharedPreferences sharedPreferences = getSharedPreferences("IDKambing",MODE_PRIVATE);
         String jsonbt = sharedPreferences.getString("btdevice", "");
 
-        BluetoothManager bluetoothManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
-        BluetoothDevice bluetoothDevice = bluetoothManager.getAdapter().getRemoteDevice(jsonbt);
+        myBluetooth = BluetoothAdapter.getDefaultAdapter();
+
+        //BluetoothManager bluetoothManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothDevice bluetoothDevice = myBluetooth.getRemoteDevice(jsonbt);
 
         startscan(bluetoothDevice, textView);
 /*
@@ -67,7 +68,7 @@ public class Scan2 extends AppCompatActivity implements works.luii.timbangan.Not
         SharedPreferences sharedPreferences = getSharedPreferences("IDKambing",MODE_PRIVATE);
         SharedPreferences.Editor IdKambing = sharedPreferences.edit();
         IdKambing.putFloat("berat", datakg);
-        IdKambing.commit();
+        IdKambing.apply();
 
         Intent intent = new Intent(Scan2.this, Upload.class);
         startActivity(intent);
@@ -76,7 +77,6 @@ public class Scan2 extends AppCompatActivity implements works.luii.timbangan.Not
     @Override
     public void needReconnect(boolean hasil) {
         Button buttonretry = (Button) findViewById(R.id.retrybutton_scan2);
-
 
         TextView textView = (TextView) findViewById(R.id.kambingkg);
         SharedPreferences sharedPreferences = getSharedPreferences("IDKambing",MODE_PRIVATE);
@@ -97,9 +97,7 @@ public class Scan2 extends AppCompatActivity implements works.luii.timbangan.Not
     }
 
     public void startscan(BluetoothDevice bluetoothDevice, TextView textView){
-
         clientThread = new works.luii.timbangan.ClientThread(Scan2.this, bluetoothDevice, textView, "", h);
         clientThread.start();
-
     }
 }

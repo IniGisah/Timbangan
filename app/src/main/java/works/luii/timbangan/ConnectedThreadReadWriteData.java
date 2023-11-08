@@ -24,7 +24,7 @@ public class ConnectedThreadReadWriteData extends Thread {
     // BT
     private final BluetoothSocket mSocket;
     private final InputStream mIs;
-    private final OutputStream mOs;
+    //private final OutputStream mOs;
 
     float kgresult;
 
@@ -43,15 +43,15 @@ public class ConnectedThreadReadWriteData extends Thread {
         this.console = console;
         this.dataToSend = dataToSend;
         InputStream tmpIs = null;
-        OutputStream tmpOs = null;
+       // OutputStream tmpOs = null;
 
         try {
             tmpIs = mSocket.getInputStream();
-            tmpOs = mSocket.getOutputStream();
+            //tmpOs = mSocket.getOutputStream();
         } catch (IOException e) {
             Log.v("Connected:", e.toString());
         }
-        mOs = tmpOs;
+        //mOs = tmpOs;
         mIs = tmpIs;
     }
 
@@ -93,7 +93,7 @@ public class ConnectedThreadReadWriteData extends Thread {
                 consoleOut(received + " kg");
                 float datakg = Float.parseFloat(received.replaceAll("[\\D]" , "" ) );
                 Log.v("datakg", datakg + " kg");
-                if (datakg > 1) {
+                if (datakg > 100) {
                     before = datakg;
                     if (before == datakg){
                         datareceive.add(datakg);//addX(10, datareceive, datakg);
@@ -156,6 +156,7 @@ public class ConnectedThreadReadWriteData extends Thread {
         }
     }
 
+    /*
     private void closeOutputStream() {
         try {
             mOs.close();
@@ -164,8 +165,10 @@ public class ConnectedThreadReadWriteData extends Thread {
         }
     }
 
+     */
+
     public void cancel() {
-        closeOutputStream();
+        //closeOutputStream();
         closeInputStream();
         try {
             mSocket.close();

@@ -20,7 +20,7 @@ public class Read1 extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.idinput);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-
+        
         editText.setOnKeyListener((v, keyCode, event) -> {
             // If the event is a key-down event on the "enter" button
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {

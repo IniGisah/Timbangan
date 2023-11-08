@@ -7,6 +7,7 @@ package works.luii.timbangan;
  * textView.
  */
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
@@ -27,6 +28,7 @@ public class ClientThread extends Thread {
     private BluetoothSocket mSocket;
     private BluetoothDevice mDevice;
     private int action;
+
 
 
     ConnectedThreadReadWriteData ct;
@@ -58,7 +60,7 @@ public class ClientThread extends Thread {
         mSocket = null;
 
         try {
-            mSocket = mDevice.createRfcommSocketToServiceRecord(myUUID);
+            mSocket = mDevice.createInsecureRfcommSocketToServiceRecord(myUUID);
         } catch (IOException e) {
             Log.v("Client:Socket:", e.toString());
         }
@@ -71,6 +73,7 @@ public class ClientThread extends Thread {
     public void run() {
         while(!ClientThread.interrupted()){
             try {
+                BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                 Log.v("Client:", "Connecting.....");
                 mSocket.connect();
                 consoleOut("Client: Connection successful!\n");
